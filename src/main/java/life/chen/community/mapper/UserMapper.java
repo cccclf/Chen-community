@@ -8,10 +8,11 @@ import org.apache.ibatis.annotations.Select;
 
 /*
 2020.2.23学习内容
+2020.3.3学习内容：add 在表格中avatar头像，实现能够插入改变量到数据库
  */
 @Mapper
 public interface UserMapper {
-    @Insert("insert into user (name,account_id,token,gmt_create,gmt_modified) values (#{name},#{accountId},#{token},#{gmtCreate},#{gmtModified})")
+    @Insert("insert into user (name,account_id,token,gmt_create,gmt_modified,avatar_url) values (#{name},#{accountId},#{token},#{gmtCreate},#{gmtModified},#{avatarUrl})")
     void insert(User user);
 
     @Select("select * from user where token = #{token}")
