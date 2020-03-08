@@ -3,6 +3,7 @@ package life.chen.community.dto;
 import life.chen.community.model.User;
 import lombok.Data;
 
+//传输层
 @Data
 public class QuestionDTO {
     private Integer id;
