@@ -1,7 +1,6 @@
 package life.chen.community.controller;
 
 import life.chen.community.mapper.QuestionMapper;
-import life.chen.community.mapper.UserMapper;
 import life.chen.community.model.Question;
 import life.chen.community.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
@@ -19,9 +17,6 @@ public class PublishController {
 
     @Autowired
     private QuestionMapper questionMapper;
-
-    @Autowired
-    private UserMapper userMapper;
 
     @GetMapping("/publish")
     public String publish() {
@@ -57,28 +52,13 @@ public class PublishController {
             model.addAttribute("error", "标签不能为空");
             return "publish";
         }
-
-
-        //若参数参数内容不为空，则验证用户是否登录，用index的方法去实现
-        User user = null;
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null && cookies.length != 0)
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("token")) {
-                    String token = cookie.getValue();
-                    user = userMapper.findByToken(token);
-                    if (user != null) {
-                        request.getSession().setAttribute("user", user);
-                    }
-                    break;
-                }
-            }
+        //若参数参数内容不为空，则验证用户是否登录(利用拦截器)，用index的方法去实现
+        User user = (User) request.getSession().getAttribute("user");
         //如果用户未登录，则返回错误信息到前面
         if (user == null) {
             model.addAttribute("error", "用户未登录");
             return "publish";
         }
-
         //一切正常后，构建对象，插入数据库，实现功能
         Question question = new Question();
         question.setTitle(title);
