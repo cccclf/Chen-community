@@ -2,7 +2,6 @@ package life.chen.community.controller;
 
 import life.chen.community.dto.AccessTokenDTO;
 import life.chen.community.dto.GithubUser;
-import life.chen.community.mapper.UserMapper;
 import life.chen.community.model.User;
 import life.chen.community.provider.GithubProvider;
 import life.chen.community.service.UserService;

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
-@Component
+@Component//把当前类初始化到Spring bean的上下文（不需要实例化对象）
 public class GithubProvider {
 
 
