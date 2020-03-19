@@ -2,6 +2,8 @@ package life.chen.community.service;
 
 import life.chen.community.dto.PaginationDTO;
 import life.chen.community.dto.QuestionDTO;
+import life.chen.community.exception.CustomizeErrorCode;
+import life.chen.community.exception.CustomizeException;
 import life.chen.community.mapper.QuestionMapper;
 import life.chen.community.mapper.UserMapper;
 import life.chen.community.model.Question;
@@ -112,6 +114,9 @@ public class QuestionService {
 
     public QuestionDTO getById(Integer id) {
         Question question = questionMapper.selectByPrimaryKey(id);
+        if (question == null){
+            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+        }
         QuestionDTO questionDTO = new QuestionDTO();
         BeanUtils.copyProperties(question, questionDTO);
         User user = userMapper.selectByPrimaryKey(question.getCreator());
@@ -133,8 +138,12 @@ public class QuestionService {
             updateQuestion.setDescription(question.getDescription());
             updateQuestion.setTag(question.getTag());
             QuestionExample example = new QuestionExample();
-            example.createCriteria().andIdEqualTo(question.getId());
-            questionMapper.updateByExampleSelective(updateQuestion, example);
+            example.createCriteria()
+                    .andIdEqualTo(question.getId());
+            int update = questionMapper.updateByExampleSelective(updateQuestion, example);
+            if (update != 1){
+                throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+            }
         }
     }
 }
