@@ -16,7 +16,7 @@ public class QuestionController {
 
     @GetMapping("/question/{id}")
     //拿到id去数据库中查询是否存在
-    public String question(@PathVariable(name = "id") Integer id,
+    public String question(@PathVariable(name = "id") Long id,
                            Model model) {
         QuestionDTO questionDTO = questionService.getById(id);
         //累加阅读数

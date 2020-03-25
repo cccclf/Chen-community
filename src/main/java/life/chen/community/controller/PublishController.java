@@ -22,7 +22,7 @@ public class PublishController {
     private QuestionService questionService;
 
     @GetMapping("/publish/{id}")
-    public String edit(@PathVariable(name = "id") Integer id,
+    public String edit(@PathVariable(name = "id") Long id,
                        Model model){
         //通过id查询，得到一个question对象
         QuestionDTO question = questionService.getById(id);
@@ -45,10 +45,10 @@ public class PublishController {
     public String doPublish(
             //21讲这里有变化
             //通过RequestParam去接收三个参数，
-            @RequestParam("title") String title,
-            @RequestParam("description") String description,
-            @RequestParam("tag") String tag,
-            @RequestParam(value = "id",required = false) Integer id,
+            @RequestParam(value = "title",required = false) String title,
+            @RequestParam(value = "description",required = false) String description,
+            @RequestParam(value = "tag",required = false) String tag,
+            @RequestParam(value = "id",required = false) Long id,
             HttpServletRequest request,
             Model model) {
         //同时首先放入model里面，为了能够回显到页面上去
