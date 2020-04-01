@@ -1,8 +1,8 @@
 package life.chen.community.controller;
 
-import life.chen.community.dto.CommentCreateDTO;
 import life.chen.community.dto.CommentDTO;
 import life.chen.community.dto.QuestionDTO;
+import life.chen.community.enums.CommentTypeEnum;
 import life.chen.community.service.CommentService;
 import life.chen.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class QuestionController {
     //拿到id去数据库中查询是否存在
     public String question(@PathVariable(name = "id") Long id, Model model) {
         QuestionDTO questionDTO = questionService.getById(id);
-        List<CommentDTO> comments = commentService.listByQuestionId(id);
+        List<CommentDTO> comments = commentService.listByTargetId(id, CommentTypeEnum.QUESTION);
         //累加阅读数
         questionService.incView(id);
         model.addAttribute("question", questionDTO);
