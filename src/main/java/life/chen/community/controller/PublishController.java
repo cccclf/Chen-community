@@ -1,10 +1,12 @@
 package life.chen.community.controller;
 
+import life.chen.community.cache.TagCache;
 import life.chen.community.dto.QuestionDTO;
 import life.chen.community.mapper.QuestionMapper;
 import life.chen.community.model.Question;
 import life.chen.community.model.User;
 import life.chen.community.service.QuestionService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,19 +25,21 @@ public class PublishController {
 
     @GetMapping("/publish/{id}")
     public String edit(@PathVariable(name = "id") Long id,
-                       Model model){
+                       Model model) {
         //通过id查询，得到一个question对象
         QuestionDTO question = questionService.getById(id);
         //回显到页面
         model.addAttribute("title", question.getTitle());
         model.addAttribute("description", question.getDescription());
         model.addAttribute("tag", question.getTag());
-        model.addAttribute("id",question.getId());
+        model.addAttribute("id", question.getId());
+        model.addAttribute("tags", TagCache.get());
         return "publish";
     }
 
     @GetMapping("/publish")
-    public String publish() {
+    public String publish(Model model) {
+        model.addAttribute("tags", TagCache.get());
         return "publish";
     }
 
@@ -45,16 +49,17 @@ public class PublishController {
     public String doPublish(
             //21讲这里有变化
             //通过RequestParam去接收三个参数，
-            @RequestParam(value = "title",required = false) String title,
-            @RequestParam(value = "description",required = false) String description,
-            @RequestParam(value = "tag",required = false) String tag,
-            @RequestParam(value = "id",required = false) Long id,
+            @RequestParam(value = "title", required = false) String title,
+            @RequestParam(value = "description", required = false) String description,
+            @RequestParam(value = "tag", required = false) String tag,
+            @RequestParam(value = "id", required = false) Long id,
             HttpServletRequest request,
             Model model) {
         //同时首先放入model里面，为了能够回显到页面上去
         model.addAttribute("title", title);
         model.addAttribute("description", description);
         model.addAttribute("tag", tag);
+        model.addAttribute("tags", TagCache.get());
 
         //其次，验证参数是否为空，空的话提示信息，需要补充
         if (title == null || title == "") {
@@ -69,6 +74,14 @@ public class PublishController {
             model.addAttribute("error", "标签不能为空");
             return "publish";
         }
+
+        String invalid = TagCache.filterInvalid(tag);
+        if (StringUtils.isNotBlank(invalid)) {
+            model.addAttribute("error", "输入非法标签:" + invalid);
+            return "publish";
+        }
+
+
         //若参数参数内容不为空，则验证用户是否登录(利用拦截器)，用index的方法去实现
         User user = (User) request.getSession().getAttribute("user");
         //如果用户未登录，则返回错误信息到前面

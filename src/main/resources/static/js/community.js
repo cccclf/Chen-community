@@ -87,10 +87,10 @@ function collapseComments(e) {
                     })).append($("<div/>", {
                         "html": comment.content
                     })).append($("<div/>", {
-                        "class":"menu",
+                        "class": "menu",
                     }).append($("<span/>", {
-                        "class":"pull-right",
-                        "html":moment(comment.gmtCreate).format('YYYY-MM-DD')
+                        "class": "pull-right",
+                        "html": moment(comment.gmtCreate).format('YYYY-MM-DD')
                     })));
 
                     let mediaElement = $("<div/>", {
@@ -109,6 +109,24 @@ function collapseComments(e) {
                 e.setAttribute("data-collapse", "in");
                 e.classList.add("active");
             });
+        }
+    }
+
+}
+
+function showSelectTag() {
+    $("#select-tag").show();
+}
+
+function selectTag(e) {
+    let value = e.getAttribute("data-tag");
+    let previous = $("#tag").val();
+
+    if (previous.indexOf(value) == -1) {
+        if (previous) {
+            $("#tag").val(previous + ',' + value);
+        } else {
+            $("#tag").val(value);
         }
     }
 
