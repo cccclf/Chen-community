@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 public class TagCache {
     public static List<TagDTO> get(){
         List<TagDTO> tagDTOs = new ArrayList<>();
+        
         TagDTO program = new TagDTO();
         program.setCategoryName("开发语言");
         program.setTags(Arrays.asList("js","php","html","java","node","python","c++","c","golang","objective-c","typescript","shell","swift","c#","sass","bash","less"));

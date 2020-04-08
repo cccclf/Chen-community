@@ -42,19 +42,20 @@
                            onclick="showSelectTag()">
                     <div id="select-tag" class="publish-tag-tab">
                         <ul class="nav nav-tabs" role="tablist">
-                            <li role="presentation" th:each="selectCatgeory: ${tags}">
+                            <li role="presentation" th:each="selectCatgeory,selectCategoryStat: ${tags}" th:class="${selectCategoryStat.first ? 'active':''}">
                                 <a th:href="${'#' + selectCatgeory.categoryName}" aria-controls="home" role="tab"
                                    data-toggle="tab" th:text="${selectCatgeory.categoryName}"></a>
                             </li>
                         </ul>
                         <div class="tab-content">
-                            <div role="tabpanel" class="tab-pane" th:id="${selectCatgeory.categoryName}"
-                                 th:each="selectCatgeory: ${tags}">
+                            <div role="tabpanel" th:id="${selectCatgeory.categoryName}"
+                                 th:each="selectCatgeory,selectCategoryStat: ${tags}"
+                                 th:class="${selectCategoryStat.first ? 'active tab-pane':'tab-pane'}">
                                 <span>
                                     <span class="label label-info" th:each="selectTag: ${selectCatgeory.tags}">
                                     <span class="glyphicon glyphicon-tags" onclick="selectTag(this)"
                                           th:data-tag="${selectTag}"
-                                          th:text="${selectTag}">
+                                          th:text="${' '+selectTag}">
                                     </span>
                                 </span>
                                 </span>
