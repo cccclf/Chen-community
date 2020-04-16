@@ -81,7 +81,8 @@ public class QuestionService {
         Integer totalPage;
 
         QuestionExample questionExample = new QuestionExample();
-        questionExample.createCriteria().andCreatorEqualTo(userId);
+        questionExample.createCriteria()
+                .andCreatorEqualTo(userId);
         Integer totalCount = (int) questionMapper.countByExample(questionExample);
 
         if (totalCount % size == 0) {
@@ -99,9 +100,9 @@ public class QuestionService {
         paginationDTO.setPagination(totalPage, page);
 
         Integer offset = size * (page - 1);
-
         QuestionExample example = new QuestionExample();
-        example.createCriteria().andCreatorEqualTo(userId);
+        example.createCriteria()
+                .andCreatorEqualTo(userId);
         List<Question> questions = questionMapper.selectByExampleWithRowbounds(example, new RowBounds(offset, size));
         List<QuestionDTO> questionDTOList = new ArrayList<>();
 
@@ -167,8 +168,15 @@ public class QuestionService {
         if (StringUtils.isBlank(queryDTO.getTag())) {
             return new ArrayList<>();
         }
+
         String[] tags = StringUtils.split(queryDTO.getTag(), ",");
-        String regexpTag = Arrays.stream(tags).collect(Collectors.joining("|"));
+        String regexpTag = Arrays
+                .stream(tags)
+                .filter(StringUtils::isNotBlank)
+                .map(t -> t.replace("+", "").replace("*", "").replace("?", ""))
+                .filter(StringUtils::isNotBlank)
+                .collect(Collectors.joining("|"));
+
         Question question = new Question();
         question.setId(queryDTO.getId());
         question.setTag(regexpTag);
