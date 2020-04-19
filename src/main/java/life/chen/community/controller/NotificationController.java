@@ -32,7 +32,7 @@ public class NotificationController {
 
         if (NotificationTypeEnum.REPLAY_COMMENT.getType() == notificationDTO.getType()
             || NotificationTypeEnum.REPLAY_QUESTION.getType() == notificationDTO.getType()) {
-            return "redirect:/question/" + notificationDTO.getOuterId();
+            return "redirect:/question/" + notificationDTO.getOuterid();
         }else {
             return "redirect:/";
         }

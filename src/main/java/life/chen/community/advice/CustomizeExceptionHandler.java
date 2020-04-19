@@ -19,7 +19,6 @@ import java.io.PrintWriter;
 //2020.3.29学习内容
 //实现了默认通用的异常处理
 @ControllerAdvice
-@Slf4j
 public class CustomizeExceptionHandler {
     @ExceptionHandler(Exception.class)
     ModelAndView handle(Throwable e, Model model, HttpServletRequest request, HttpServletResponse response) {
@@ -30,7 +29,6 @@ public class CustomizeExceptionHandler {
             if (e instanceof CustomizeException) {
                 resultDTO = ResultDTO.errorOf((CustomizeException) e);
             } else {
-                log.error("handle error", e);
                 resultDTO = ResultDTO.errorOf(CustomizeErrorCode.SYS_ERROR);
             }
             try {
@@ -48,7 +46,6 @@ public class CustomizeExceptionHandler {
             if (e instanceof CustomizeException) {
                 model.addAttribute("message", e.getMessage());
             } else {
-                log.error("handle error", e);
                 model.addAttribute("message", CustomizeErrorCode.SYS_ERROR.getMessage());
             }
             return new ModelAndView("error");

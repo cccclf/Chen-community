@@ -28,7 +28,6 @@ public class NotificationService {
         PaginationDTO<NotificationDTO> paginationDTO = new PaginationDTO<>();
 
         Integer totalPage;
-
         NotificationExample notificationExample = new NotificationExample();
         notificationExample.createCriteria()
                 .andReceiverEqualTo(userId);
@@ -91,7 +90,6 @@ public class NotificationService {
         }
         notification.setStatus(NotificationStatusEnum.READ.getStatus());
         notificationMapper.updateByPrimaryKey(notification);
-
         NotificationDTO notificationDTO = new NotificationDTO();
         BeanUtils.copyProperties(notification, notificationDTO);
         notificationDTO.setTypeName(NotificationTypeEnum.nameOfType(notification.getType()));
