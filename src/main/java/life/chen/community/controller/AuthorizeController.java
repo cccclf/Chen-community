@@ -37,7 +37,7 @@ public class AuthorizeController {
                            HttpServletResponse response){
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
         accessTokenDTO.setClient_id("0e649891a46584546778");
-        accessTokenDTO.setClient_secret("db77b06f61d1deb2dbb1d1a44193109111f45b37");
+        accessTokenDTO.setClient_secret("801bb045063f6646559bb89ca5ab8b0a524e88c7");
         accessTokenDTO.setCode(code);
         accessTokenDTO.setRedirect_uri("http://localhost:8887/callback");
         accessTokenDTO.setState(state);
@@ -51,8 +51,10 @@ public class AuthorizeController {
             user.setName(githubUser.getName());
             user.setAccountId(String.valueOf(githubUser.getId()));
             user.setAvatarUrl(githubUser.getAvatar_url());
+            //这里是模拟实现cookie-session
+            //把user信息写入数据库相当于就是把信息写入session
             userService.createOrUpdate(user);
-            //并且把token放到cookie里面
+            //并且把token放到cookie里面，用token来校验用户是否已经在session（数据库）中
             response.addCookie(new Cookie("token",token));
             return "redirect:/";
         }else{
